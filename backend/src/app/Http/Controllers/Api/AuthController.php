@@ -138,7 +138,7 @@ class AuthController extends Controller
         }
     }
 
-    public function forgotPassword(Request $request){
+    public function forgotPassword(Request $request){ 
         $email = $request->email;
         $user = User::where('email', $email)->first();  
         if ($user){

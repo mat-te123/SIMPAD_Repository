@@ -20,6 +20,12 @@ class Project extends Model
         'project_type',
         'created_at',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_project', 'project_id', 'user_id')
+                    ->withPivot('role');
+    }
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class, 'project_id', 'project_id');

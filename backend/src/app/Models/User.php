@@ -22,9 +22,18 @@ class User extends Authenticatable
         'user_id',
         'username',
         'email',
-        'password',
+        'password_hash',
         'first_name',
         'last_name',
+        'nim',
+        'phone_number',
+        'address',
+        'profile_picture',
+        'profile_info',
+        'fullname',
+        'angkatan',
+        'linkedin',
+        'instagram',
         'email_verfied_at',
         'email_verification_token',
         'email_verified',
@@ -49,6 +58,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function projects(){
+        return $this->belongsToMany(Project::class, 'user_project', 'user_id', 'project_id')
+                    ->withPivot('role'); // to access user’s role in the project
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class, 'user_id', 'user_id');
+    }
 
     // public function emailverification(){
     //     $email = $this->email;
