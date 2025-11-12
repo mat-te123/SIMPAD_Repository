@@ -1,0 +1,69 @@
+
+services:
+  # backend service punya daveena laravel 10
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: PAD1-Backend
+    ports:
+      - "8000:8000"  
+    working_dir: /var/www
+    volumes:
+      - ./backend/src:/var/www
+    depends_on:
+      - db
+    networks:
+      - appnet
+    environment:
+      APP_ENV: local
+
+  web:
+    image: phpmyadmin/phpmyadmin
+    container_name: PAD1-phpmyadmin
+    environment:
+       PMA_HOST: db
+       PMA_USER: laravel
+       PMA_PASSWORD: secret
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - appnet
+
+  db:
+    image: mysql:8.0
+    container_name: PAD1-mysql
+    environment:
+      MYSQL_DATABASE: SIMPAD_DATABASE
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"   # opsional, hanya jika ingin akses dari host
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - appnet
+
+  frontend:
+    image: node:20-alpine
+    container_name: PAD1-frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "5173:5173"
+    networks:
+      - appnet
+    # jika perlu akses ke API via service name 'web', bisa gunakan http://web
+    # tapi kita expose ke host via localhost:8080 jadi tidak wajib
+
+volumes:
+  dbdata:
+
+networks:
+  appnet:
+    driver: bridge

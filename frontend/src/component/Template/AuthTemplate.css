@@ -1,0 +1,113 @@
+
+
+/* Container Utama */
+.AuthTemplate-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    
+
+}
+
+/* body {
+    background: linear-gradient(180deg, rgba(100, 254, 254, 0.00) 0%, rgba(60, 152, 152, 0.28) 91.35%), #FFF;
+
+
+} */
+
+
+
+/* bagian AuthTemplate componen */
+
+.AuthTemplate-component {
+    display: flex;
+    flex-direction: row;
+    /* min-width: 500px; */
+    height: fit-content;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 33.22px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 24px;
+    max-height: 90vh;
+    overflow: hidden;
+
+
+}
+
+.AuthTemplate-component h2 {
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 39px;
+    color: #000000;
+    margin: 0;
+}
+
+
+/* bagina konten */
+.Content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    padding: 55.36px;
+    min-height: 711px;
+    overflow-y: auto;
+}
+
+
+/* Bagian Image */
+
+.Image-Place-Holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    height: 100%;
+}
+
+.Image-Place-Holder img {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    border-radius: 0 24px 24px 0;
+
+}
+
+
+/* Bagian Sing Up */
+
+.Sign-Up-Place-Holder p {
+    font-weight: 400;
+    font-size: 9px;
+    line-height: 140%;
+    color: #017777;
+    margin: 0;
+}
+
+.Sign-Up-Place-Holder a {
+    font-weight: 400;
+    font-size: 9px;
+    line-height: 140%;
+    color: #017777;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+}
+
+.Sign-Up-Place-Holder a:hover {
+    transition: all 0.5s ease-in-out;
+    color: #000000;
+    text-decoration: underline;
+}
+
+/* tag HR */
+
+hr {
+    width: 100%;
+    color: gray;
+}

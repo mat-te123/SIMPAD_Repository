@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@plugin './heroUI/hero.js';
+/* Note: You may need to change the path to fit your project structure */
+@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+
+
+:root {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html.assist *{
+  border: solid 1px red;
+}
+
+
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  scroll-behavior: smooth; /* kalau mau hilangkan scroll kecil */
+}
+
+.ScrollHide::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  background-color: #f0f0f0; /* optional, biar gak putih kosong */
+}
+

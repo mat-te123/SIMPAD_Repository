@@ -1,0 +1,12 @@
+.SignUpButton {
+    background-color: white;
+    border: solid #BBBBBB 1px;
+    font-weight: bold;
+}
+
+.LoginButton {
+    background-color: #017777;
+    border: solid #044645 1px;
+    font-weight: bold;
+    color: white;
+}
