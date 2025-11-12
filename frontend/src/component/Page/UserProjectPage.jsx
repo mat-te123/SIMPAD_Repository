@@ -33,23 +33,34 @@ function UserProjectPage() {
                         {/* Bagian Kanan */}
                         <div>
                             <Button className="bg-[#017777] text-white "
-                            endContent={ <img src={ArrowRight} alt="IconButton" />}>
+                                endContent={<img src={ArrowRight} alt="IconButton" />}>
                                 Get To Know
                             </Button>
                         </div>
                     </div>
                     {/* Gambar Project */}
-                    <div>
-                        {VideoSource === "" ? }
-                        <img src="" alt="Gambar Project" />
+                    <div className="w-full h-[800px] bg-gray-500 flex items-center justify-center rounded-4xl">
+                        {ImageSource === "" ? (
+                            <p className="text-[white] text-xl">
+                                Image Place Holder
+                            </p>
+                        ) : (
+                            <img src={ImageSource} alt="Gambar Project" />
+                        )}
                     </div>
                     {/* Penjelasan Project */}
                     <p>
                         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ex mollitia distinctio sunt fugiat perspiciatis modi rem molestias a facere quo architecto ducimus pariatur dolor cupiditate tempore, aspernatur veniam velit officia.
                     </p>
                     {/* video Project */}
-                    <div>
-                        <video src="" alt="Tempat Video"></video>
+                    <div className="w-full h-[800px] bg-gray-500 flex items-center justify-center rounded-4xl">
+                        {VideoSource === "" ? (
+                            <p className="text-[white] text-xl">
+                                Video Place Holder
+                            </p>
+                        ) : (
+                            <video src={VideoSource} alt="Video Project"></video>
+                        )}
                     </div>
                     {/* penjelasan Kedua */}
                     <p>
@@ -76,7 +87,7 @@ function UserProjectPage() {
 
                 </div>
 
-           </div>
+            </div>
         </MainTemplate>
 
 
