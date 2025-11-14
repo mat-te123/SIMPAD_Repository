@@ -13,9 +13,10 @@ import HomeApiData from "../Logic/HomeApiData";
 function index() {
 
     const Arrow = '/Arrow.svg';
-    const Test = '/Vector.svg';
-    const PlaceHolder = '/PlaceHolder.svg';
     const ArrowUp = '/ArrowUp.svg';
+    const Briefcase = '/NotFoundContent/Briefcase.svg';
+    const BlakcColor = "#OB1215";
+    const GrayColor = '#44444E';
 
     const [isActive, SetActive] = useState(true)
 
@@ -24,7 +25,7 @@ function index() {
     }
 
     // API BACKEND
-    const {CompanyData, ProjectData} = HomeApiData;
+    const { CompanyData, ProjectData } = HomeApiData;
 
     return (
         <MainTemplate title='index'>
@@ -60,19 +61,28 @@ function index() {
                 {/* LOGO Company infinte Scroll */}
                 <div className="company-banner relative w-full overflow-hidden h-[98px]">
                     {CompanyData.length === 0 ? (
-                        <p className="text-center text-red-500 text-3xl">
-                            Still on development, no companies found
-                        </p>
+                        <div className="flex flex-row justify-center items-center">
+                            <img src={Briefcase} alt="Icon" width="100" height="100" />
+                            <div className="w-fit flex flex-col justify-items-start items-center">
+                                <h1 className={`text-[${BlakcColor}] text-[24px] font-bold`}>
+                                    No Partner Companies Yet
+                                </h1>
+                                <h2 className={`text-[${GrayColor}] text-[16px] font-medium w-[400px]`}>
+                                    We haven't partnered with any companies at the moment.
+                                    If your organization is interested in collaborating, feel free to contact sv.trpl.
+                                </h2>
+                            </div>
+                        </div>
                     ) : (
                         <div className="company-wrapper flex gap-10 animate-scroll">
-                        {[...Array(5)].map((_, i) => ( // repeat list 3x for smooth looping
-                            <Fragment key={i}>
-                                {CompanyData.map(({ logo, name }, index) => (
-                                    <Company key={`${i}-${index}`} logo={logo} name={name} />
-                                ))}
-                            </Fragment>
-                        ))}
-                    </div>
+                            {[...Array(5)].map((_, i) => ( // repeat list 3x for smooth looping
+                                <Fragment key={i}>
+                                    {CompanyData.map(({ logo, name }, index) => (
+                                        <Company key={`${i}-${index}`} logo={logo} name={name} />
+                                    ))}
+                                </Fragment>
+                            ))}
+                        </div>
                     )}
                 </div>
                 {/* Kontent utama termasuk */}
