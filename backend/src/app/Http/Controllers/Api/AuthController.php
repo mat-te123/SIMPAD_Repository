@@ -16,8 +16,10 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except(['register', 'login', 'emailVerify', 'verifEmail', 'logout']);
+        $this->middleware('auth:sanctum')->except(['register', 'login', 'emailVerify', 'verifEmail', 'logout', 'googleLogin']);
     }
+
+    // Ini egga perlu
 
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
@@ -62,6 +64,9 @@ class AuthController extends Controller
         ], 201);
     }
 
+
+    // ini juga egga perlu 
+
     public function login(Request $request){
         $validator = Validator::make($request->all(), [
             'username' => 'required|string',
@@ -93,6 +98,40 @@ class AuthController extends Controller
             ]
         ]);
     }
+
+    // Method baru verify akun ugm
+
+    public function googleLogin(Request $request){
+        $email = $request->email;
+        
+        if (!$email || (!Str::endsWith($email, '@mail.ugm.ac.id') && !Str::endsWith($email, '@ugm.ac.id'))) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Login is only available for @mail.ugm.ac.id email addresses.'
+            ], 422);
+        }
+
+        $user = User::firstOrCreate(
+            ['email' => $email],
+            [
+                'username' => explode('@', $email)[0],
+            ]
+        );
+
+        $token = $user->createToken('authToken')->plainTextToken;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Login Success',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer'
+            ]
+        ]);
+    }
+
+    // ini egga perlu
 
     public function emailVerify($email){
         $user = User::where('email', $email)->first();  
@@ -138,6 +177,8 @@ class AuthController extends Controller
         }
     }
 
+    // ini egga perlu
+
     public function forgotPassword(Request $request){ 
         $email = $request->email;
         $user = User::where('email', $email)->first();  
@@ -162,6 +203,8 @@ class AuthController extends Controller
             ], 404);
         }
     }
+
+    // ini egga perlu 
 
     public function resetPassword(Request $request){
         $user_id = $request->user_id;

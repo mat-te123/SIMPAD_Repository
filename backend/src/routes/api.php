@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\NavHomeController;
+use App\Http\Controllers\Api\NavProjectController;
+use App\Http\Controllers\Api\NavMahasiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +22,31 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+// Data Routes
+
+Route::controller(NavHomeController::class)->group(function () {
+    Route::get('/home', 'showHome');
+    Route::get('/company', 'showCompany');
+});
+
+Route::controller(NavProjectController::class)->group(function () {
+    Route::get('/project', 'showProject');
+    Route::get('/project/{id}', 'showDetailProject');
+});
+
+Route::controller(NavMahasiswaController::class)->group(function () {
+    Route::get('/mahasiswa', 'showMahasiswa');
+    Route::get('/mahasiswa/{id}', 'showDetailMahasiswa');
+});
+
+
+// Auth Routes
+
 Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
+    Route::post('/login/google', 'googleLogin'); 
     Route::post('/emailverify','emailVerify');
     Route::post('/verifemail', 'verifEmail');
     Route::post('/forgotpassword', 'forgotPassword');

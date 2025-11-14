@@ -15,6 +15,15 @@ class NavHomeController extends Controller
             'company_name',
             'company_image',
         )->get();
+
+        if ($companies->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No companies found'
+            ], 404);
+        }
+
+        
         return response()->json($companies);
     }
     public function showProject(){

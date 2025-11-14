@@ -20,6 +20,7 @@ class NavMahasiswaController extends Controller
         )->get();
         return response()->json($users);
     }
+
     public function showDetailMahasiswa($id){
         $user = User::select(
             'user_id',
@@ -34,7 +35,7 @@ class NavMahasiswaController extends Controller
             'nim',
         )
         ->where('user_id', $id)
-        ->with(['projects' -> function($query){
+        ->with(['projects' => function($query){
             $query->select(
                 'project_id',
                 'title',

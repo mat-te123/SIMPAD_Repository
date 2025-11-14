@@ -13,10 +13,3 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-
-Route::get('/home', [Api\NavHomeController::class, 'showHome']);
-Route::get('/project', [Api\NavProjectController::class, 'showProject']);
-Route::get('/project/{id}', [Api\NavProjectController::class, 'showDetailProject']);
-Route::get('/mahasiswa', [Api\NavMahasiswaController::class, 'showMahasiswa']);
-Route::get('/mahasiswa/{id}', [Api\NavMahasiswaController::class, 'showDetailMahasiswa']);

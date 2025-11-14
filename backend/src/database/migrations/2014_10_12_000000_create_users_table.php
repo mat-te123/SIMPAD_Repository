@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('user_id')->unique();
             $table->string('username');
             $table->string('email')->unique();
-            $table->string('password_hash');
             $table->string('profile_info')->nullable();
             $table->enum('user_role', ['admin', 'member'])->default('member');
             $table->string('fullname')->nullable();

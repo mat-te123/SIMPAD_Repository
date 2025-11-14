@@ -8,7 +8,7 @@ import {
     DropdownItem
 } from "@heroui/react";
 
-function ProjectContent() {
+function ProjectContent({data}) {
 
     const FilterIcon = '/settings-alt.svg';
     const FIlterIcon2 = '/ArrowDown.svg';
@@ -26,11 +26,6 @@ function ProjectContent() {
         setTab(tab)
     }
 
-
-
-
-
-    const ProjectCard = { id: 1, image: PlaceHolder, name: "Project 1" };
 
 
     return (
@@ -87,11 +82,21 @@ function ProjectContent() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row flex-wrap items-center justify-between py-7 gap-4">
-                <Projectcard id={ProjectCard.id} image={ProjectCard.image} name={ProjectCard.name} />
-                <Projectcard id={ProjectCard.id} image={ProjectCard.image} name={ProjectCard.name} />
-                <Projectcard id={ProjectCard.id} image={ProjectCard.image} name={ProjectCard.name} />
-                <Projectcard id={ProjectCard.id} image={ProjectCard.image} name={ProjectCard.name} />
+            <div className={`flex flex-row flex-wrap py-7 gap-4 items-center
+                ${data && data.length === 0 ? "h-[150px] justify-center" : "justify-between"}`}>
+                {/* Card Project */}
+                {data && data.length > 0 ? (
+                    data.map((project) => ( 
+                        <Projectcard
+                            key={project.id}
+                            title={project.title}
+                            imageSource={project.cover_image_url || PlaceHolder}></Projectcard>
+                    ))) : (
+                        <p className="text-center text-red-500 text-3xl">
+                            Still on development, no projects found
+                        </p>
+                    )
+                }
             </div>
         </div>
     )

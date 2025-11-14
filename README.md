@@ -19,3 +19,9 @@ alangkah baiknya untuk mengisi bagian dokumentasi ini agar mudah untuk melakukan
 12/11/25
 
 Bikin Repository yang lebih rapi
+
+14/11/25
+
+Connect Backend ke Frontend, index lebih dinamis, fixing controller di backend, nambah function baru buat login pake google decided unutk ngapus semua function login jadinya cuma pake loginwithgoogle sama logout
+
+

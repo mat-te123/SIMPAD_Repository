@@ -14,6 +14,14 @@ class NavProjectController extends Controller
             'title',
             'cover_image_url',
         )->paginate(6);
+        
+        if ($projects->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No projects found'
+            ], 404);
+        }
+
         return response()->json($projects);
     }
     public function showDetailProject($id){

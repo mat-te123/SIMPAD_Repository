@@ -5,6 +5,10 @@ import { useState, Fragment } from "react";
 import Projectcontent from "./ProjectContent";
 import "./index.css"
 
+// API
+
+import HomeApiData from "../Logic/HomeApiData";
+
 
 function index() {
 
@@ -19,18 +23,8 @@ function index() {
         console.log("Button Press")
     }
 
-    const CompanyData = [
-        { logo: Test, name: "company 1" },
-        { logo: Test, name: "company 2" },
-        { logo: Test, name: "company 3" },
-        { logo: Test, name: "company 4" },
-        { logo: Test, name: "company 5" },
-        { logo: Test, name: "company 6" },
-        { logo: Test, name: "company 7" },
-        { logo: Test, name: "company 8" },
-        { logo: Test, name: "company 9" },
-        { logo: Test, name: "company 10" },
-    ] // props
+    // API BACKEND
+    const {CompanyData, ProjectData} = HomeApiData;
 
     return (
         <MainTemplate title='index'>
@@ -65,7 +59,12 @@ function index() {
                 </div>
                 {/* LOGO Company infinte Scroll */}
                 <div className="company-banner relative w-full overflow-hidden h-[98px]">
-                    <div className="company-wrapper flex gap-10 animate-scroll">
+                    {CompanyData.length === 0 ? (
+                        <p className="text-center text-red-500 text-3xl">
+                            Still on development, no companies found
+                        </p>
+                    ) : (
+                        <div className="company-wrapper flex gap-10 animate-scroll">
                         {[...Array(5)].map((_, i) => ( // repeat list 3x for smooth looping
                             <Fragment key={i}>
                                 {CompanyData.map(({ logo, name }, index) => (
@@ -74,9 +73,10 @@ function index() {
                             </Fragment>
                         ))}
                     </div>
+                    )}
                 </div>
                 {/* Kontent utama termasuk */}
-                <Projectcontent />
+                <Projectcontent data={ProjectData} />
                 <div id="ButtonLoadMore-Up" className="relative w-full flex items-center justify-end px-10 py-10 ">
                     {/* Centered button */}
                     <div className="absolute left-1/2 -translate-x-1/2">
