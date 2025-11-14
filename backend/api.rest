@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:8000/api
+@token = YOUR_TOKEN_HERE
+
+### LOGIN GOOGLE
+POST {{baseUrl}}/login/google
+Content-Type: application/json
+
+{
+  "id_token": "GOOGLE_ID_TOKEN",
+  "email": "daveenaalexandrapentury@mail.ugm.ac.id"
+}

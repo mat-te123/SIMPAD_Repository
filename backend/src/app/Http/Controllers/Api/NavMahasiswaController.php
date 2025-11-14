@@ -33,6 +33,7 @@ class NavMahasiswaController extends Controller
             'phone_number',
             'address',
             'nim',
+            'background',
         )
         ->where('user_id', $id)
         ->with(['projects' => function($query){

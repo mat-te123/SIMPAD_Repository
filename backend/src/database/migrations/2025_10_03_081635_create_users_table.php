@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('nim')->nullable();
             $table->string('profile_picture')->nullable();
+            $table->string('background')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
