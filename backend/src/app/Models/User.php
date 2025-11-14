@@ -22,9 +22,6 @@ class User extends Authenticatable
         'user_id',
         'username',
         'email',
-        'password_hash',
-        'first_name',
-        'last_name',
         'nim',
         'phone_number',
         'address',
@@ -34,9 +31,6 @@ class User extends Authenticatable
         'angkatan',
         'linkedin',
         'instagram',
-        'email_verfied_at',
-        'email_verification_token',
-        'email_verified',
     ];
 
     /**
@@ -45,7 +39,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
@@ -54,10 +47,6 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
 
     public function projects(){
         return $this->belongsToMany(Project::class, 'user_project', 'user_id', 'project_id')
@@ -68,18 +57,4 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class, 'user_id', 'user_id');
     }
 
-    // public function emailverification(){
-    //     $email = $this->email;
-    //     $token = Str::random(40);
-    //     $user = User::where('email', $email)->first();
-    //     $user->update([
-    //         'email_verification_token' => $token
-    //     ]);
-    //     $link = env('Front_url').'email-verification?token='.$token;
-    //     \Mail::send([],[], function($message) use ($email, $link){
-    //         $message->to($email)
-    //         ->subject('Verify Your Email Address')
-    //         ->html('<p>Verify Your Email</p><br/><a href="'.$link.'">Verify Email Address</a>');
-    //     });
-    // }
 }

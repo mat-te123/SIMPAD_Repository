@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained('projects', 'project_id')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users','user_id')->onDelete('cascade');
             $table->text('content');
-            // $table->dateTime('created_at')->useCurrent();
             $table->timestamps();
         });
     }

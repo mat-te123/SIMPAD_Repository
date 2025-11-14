@@ -37,9 +37,11 @@ class NavMahasiswaController extends Controller
         ->where('user_id', $id)
         ->with(['projects' => function($query){
             $query->select(
-                'project_id',
-                'title',
-                'cover_image_url',
+            'projects.project_id',
+            'projects.title',
+            'projects.description',
+            'projects.project_type',
+            'projects.cover_image_url'
             );
         }])->findOrFail($id);
         return response()->json($user);

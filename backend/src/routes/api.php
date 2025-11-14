@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NavHomeController;
 use App\Http\Controllers\Api\NavProjectController;
 use App\Http\Controllers\Api\NavMahasiswaController;
+use App\Http\Controllers\Api\ProjectController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +27,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Data Routes
 
+Route::controller(ProjectController::class)->group(function () {
+    Route::post('/addproject', 'store')->middleware('auth:sanctum');
+});
+
+// Untuk dimasukin ke dropdown mahasiswa 
+Route::get('/students', function() {
+    return \App\Models\User::select('user_id', 'fullname')->get();
+});
+
+
 Route::controller(NavHomeController::class)->group(function () {
     Route::get('/home', 'showHome');
     Route::get('/company', 'showCompany');
@@ -33,6 +45,7 @@ Route::controller(NavHomeController::class)->group(function () {
 Route::controller(NavProjectController::class)->group(function () {
     Route::get('/project', 'showProject');
     Route::get('/project/{id}', 'showDetailProject');
+    Route::post('/project/{project_id}/comments', [\App\Http\Controllers\Api\CommentController::class, 'store'])->middleware('auth:sanctum');
 });
 
 Route::controller(NavMahasiswaController::class)->group(function () {
@@ -44,14 +57,6 @@ Route::controller(NavMahasiswaController::class)->group(function () {
 // Auth Routes
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/register', 'register');
-    Route::post('/login', 'login');
     Route::post('/login/google', 'googleLogin'); 
-    Route::post('/emailverify','emailVerify');
-    Route::post('/verifemail', 'verifEmail');
-    Route::post('/forgotpassword', 'forgotPassword');
-    Route::post('/resetpassword', 'resetPassword');
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
-    Route::get('/user', 'getUser')->middleware('auth:sanctum');
-    Route::put('/user/update', 'updateUser')->middleware('auth:sanctum');
 });
