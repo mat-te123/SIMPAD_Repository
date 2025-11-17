@@ -8,11 +8,17 @@ import {
     DropdownItem
 } from "@heroui/react";
 
-function ProjectContent({data}) {
+import HomeApiData from "../Logic/HomeApiData";
+
+
+function ProjectContent() {
 
     const FilterIcon = '/settings-alt.svg';
     const FIlterIcon2 = '/ArrowDown.svg';
     const PlaceHolder = '/PlaceHolder.svg';
+    const Files = '/NotFoundContent/Files.svg';
+
+    const { ProjectData: data } = HomeApiData;
 
     const [ActiveTab, setTab] = useState("PAD1");
     const [SelectedKeys, setSelectedKeys] = useState(new Set(["New"]));
@@ -29,10 +35,10 @@ function ProjectContent({data}) {
 
 
     return (
-        <div id="Konten-Utama" className="w-full px-10">
+        <div id="Konten-Utama" className="w-full px-10 pt-20">
             {/* bagian filter */}
             <div id="Filter-Option" className="flex flex-row justify-between items-center">
-                <div id="Filter" className="flex flex-row gap-5">   
+                <div id="Filter" className="flex flex-row gap-5">
                     <Dropdown>
                         <DropdownTrigger>
                             <Button id="filter_2" className="border-1 border-[#BBBBBB] bg-[#FFFFFF] px-[20px] py-[12px] text-[#044645]"
@@ -47,9 +53,9 @@ function ProjectContent({data}) {
                             selectedKeys={SelectedKeys}
                             selectionMode="single"
                             onSelectionChange={setSelectedKeys}
-                            >
-                            <DropdownItem key="New" className={` ${SelectedValue === "New" ? "text-[#044645]" : "text-[#BBBBBB]"} `}>New</DropdownItem>   
-                            <DropdownItem key="A-Z" className={` ${SelectedValue === "A-Z" ? "text-[#044645]" : "text-[#BBBBBB]" }`}>A-Z</DropdownItem>   
+                        >
+                            <DropdownItem key="New" className={` ${SelectedValue === "New" ? "text-[#044645]" : "text-[#BBBBBB]"} `}>New</DropdownItem>
+                            <DropdownItem key="A-Z" className={` ${SelectedValue === "A-Z" ? "text-[#044645]" : "text-[#BBBBBB]"}`}>A-Z</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -82,20 +88,29 @@ function ProjectContent({data}) {
                     </div>
                 </div>
             </div>
-            <div className={`flex flex-row flex-wrap py-7 gap-4 items-center
+            <div className={`flex flex-row flex-wrap py-7 gap-4 items-center overflow-hidden h-[500px]
                 ${data && data.length === 0 ? "h-[150px] justify-center" : "justify-between"}`}>
                 {/* Card Project */}
                 {data && data.length > 0 ? (
-                    data.map((project) => ( 
+                    data.map((project) => (
                         <Projectcard
                             key={project.id}
                             title={project.title}
                             imageSource={project.cover_image_url || PlaceHolder}></Projectcard>
                     ))) : (
-                        <p className="text-center text-red-500 text-3xl">
-                            Still on development, no projects found
-                        </p>
-                    )
+                    <div className="flex flex-row justify-center items-center gap-20">
+                        <img src={Files} alt="Icon" width="250" height="250" />
+                        <div className="flex flex-col items-start justify-center w-[500px]">
+                            <h1 className={`text-[#0B1215] text-[36px] font-bold w-full`}>
+                                No Projects Uploaded Yet
+                            </h1>
+                            <h2 className={`text-[#758694] text-[16px] font-medium w-[80%]`}>
+                                There are currently no projects available.
+                                If you'd like to upload or share a project, plese login with UGM mail.
+                            </h2>
+                        </div>
+                    </div>
+                )
                 }
             </div>
         </div>

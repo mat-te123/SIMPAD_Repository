@@ -19,7 +19,7 @@ function MainTemplate({ title, children }) {
 
 
     return (
-            <div className="relative h-screen w-screen bg-black overflow-y-auto">
+            <div className="relative h-screen w-screen bg-white overflow-y-auto">
                 <div className='fixed z-100 top-0 left-0 py-6 px-5'>
                     <button className='bg-red-600 p-2 rounded-xl text-white cursor-pointer font-bold hover:bg-red-700' onClick={Assist}>
                         {isBorder ? "Disable Assist" : "use Assist"}

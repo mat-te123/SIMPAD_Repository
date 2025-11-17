@@ -3,6 +3,7 @@ import Projectcard from "../ReuseableComponents/ProjectCard";
 import { Input, Button } from "@heroui/react";
 import Projectcontent from "./ProjectContent";
 
+// API Fetching
 
 function ProjectPage() {
 
@@ -11,6 +12,7 @@ function ProjectPage() {
     const ArrowUp = '/ArrowUp.svg';
     const FilterIcon = '/settings-alt.svg'
     const FIlterIcon2 = '/ArrowDown.svg';
+
 
 
 
@@ -41,9 +43,7 @@ function ProjectPage() {
             {/* Main Content */}
             <div className="bg-white">
                 {/* Bagian Project Card */}
-                <div className="pt-10">
                 <Projectcontent/>
-                </div>
                 <div id="ButtonLoadMore-Up" className="relative w-full flex items-center justify-end px-10 py-10 ">
                     {/* Centered button */}
                     <div className="absolute left-1/2 -translate-x-1/2">

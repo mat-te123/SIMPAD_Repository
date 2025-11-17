@@ -10,60 +10,46 @@ import Google from '../Logic/LoginViaGoogle'
 
 
 function AuthTemplate({ children, title }) {
-    const isLogin = title === "Log In";
-    const isEmail = title === "Find by Email";
-    const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
-    const googlelogin = Google();
+    // const isLogin = title === "Log In";
+    // const isEmail = title === "Find by Email";
+    // const navigate = useNavigate();
+    // const [isLoading, setIsLoading] = useState(false);
+    // const googlelogin = Google();
+
+    // Assistive Mode Toggle
+    const [isBorder,setBorder] = useState(true);
+
+    function Assist(){
+        setBorder(!isBorder);
+        document.documentElement.classList.toggle("assist", !isBorder);
+    }
 
 
-    const handleLogin = async () => {
-        setIsLoading(true);
-        googlelogin();
-        setTimeout(() =>
-            setIsLoading(false),
-            3000);
-    };
+    // const handleLogin = async () => {
+    //     setIsLoading(true);
+    //     googlelogin();
+    //     setTimeout(() =>
+    //         setIsLoading(false),
+    //         3000);
+    // };
 
 
 
     return (
         <div className="AuthTemplate-container bg-gradient-to-b from-[rgba(100,254,254,0)] to-[rgba(60,152,152,0.28)]">
+            <div className='fixed z-100 top-0 left-0 py-6 px-5'>
+                <button className='bg-red-600 p-2 rounded-xl text-white cursor-pointer font-bold hover:bg-red-700' onClick={Assist}>
+                    {isBorder ? "Disable Assist" : "use Assist"}
+                </button>
+            </div>
             <div className="AuthTemplate-component">
                 <div className='Content'>
                     <h2>{title}</h2>
                     {children}
-                    <hr />
-                    {isLogin ?
-                        <div className='w-full'>
-                            <Button
-                                className='w-full font-bold'
-                                variant='bordered'
-                                isLoading={isLoading}
-                                onPress={handleLogin}
-                            >
-                                {isLogin
-                                    ? isLoading
-                                        ? "Loading...."
-                                        : "Log In with Email UGM"
-                                    : null}
-                            </Button>
-
-                        </div>
-                        :
-                        null}
-
-
-                    <div className='Sign-Up-Place-Holder'>
-                        {isLogin ? <p>No account yet? <Link to="/register">Sign Up</Link></p> : null}
-                        {!isLogin ? <p>Already have an account? <Link to="/login">Log in</Link></p> : null}
-                    </div>
-                </div>
-                {!isEmail && (
+                </div> 
                     <div className='Image-Place-Holder'>
-                        {isEmail ? null : <img src="./public/LOGO.png" alt="gambar" />}
+                        <img src="./public/LOGO.png" alt="gambar"/>
                     </div>
-                )}
             </div>
         </div>
     )
