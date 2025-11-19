@@ -17,7 +17,7 @@ function ProjectPage() {
 
 
     return ( 
-        <MainTemplate title="Project">
+        <MainTemplate title="Project" isSearchbar={false}>
             {/* Konten Diatas */}
             <div className="w-full py-8 px-10 min-h-screen flex flex-row items-center justify-start bg-gradient-to-b from-[rgba(100,254,254,0)] to-[rgba(60,152,152,0.28)] bg-white">
                 <div className="w-[50%] h-fit gap-10">

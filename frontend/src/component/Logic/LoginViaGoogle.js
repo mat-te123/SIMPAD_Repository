@@ -18,12 +18,14 @@ export default function LoginGoogle() {
             },
         });
 
-        const email = userinfo.email;
+        const email = userinfo.data.email;
+        console.log("User email:", email);
+        
 
         try {
             const data = await Check(email);
             if (data === true){
-                navigate('/demo')
+                navigate("/");
             }
         } catch{
             return false

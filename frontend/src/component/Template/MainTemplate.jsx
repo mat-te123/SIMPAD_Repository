@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 
 
-function MainTemplate({ title, children }) {
+function MainTemplate({ title, children, isSearchbar = true}) {
     const [isBorder,setBorder] = useState(true);
 
     function Assist(){
@@ -26,7 +26,7 @@ function MainTemplate({ title, children }) {
                     </button>
                 </div>
                 <div className={`${CurrentLocation === "/" ? "fixed bg-white/20 backdrop-blur-md shadow-sm" : "fixed bg-white"} top-0 left-0 z-50  w-full`}>
-                    <Navbar title={CurrentLocation}/>
+                    <Navbar title={CurrentLocation} isSearchbar={isSearchbar}/>
                 </div>
                 <div className='relative pt-0'>
                     {children}

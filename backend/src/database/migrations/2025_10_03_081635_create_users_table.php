@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('profile_info')->nullable();
             $table->enum('user_role', ['admin', 'member'])->default('member');
-            $table->string('fullname')->nullable();
             $table->string('angkatan')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('instagram')->nullable();    

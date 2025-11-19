@@ -11,31 +11,31 @@ class NavMahasiswaController extends Controller
     public function showMahasiswa(){
         $users = User::select(
             'user_id',
-            'fullname',
+            'username',
             'angkatan',
-            // 'email',
-            // 'linkedin',
-            // 'instagram',
+            'email',
             'profile_picture',
         )->get();
         return response()->json($users);
     }
 
     public function showDetailMahasiswa($id){
-        $user = User::select(
-            'user_id',
-            'fullname',
-            'angkatan',
-            'email',
-            'linkedin',
-            'instagram',
-            'profile_picture',
-            'phone_number',
-            'address',
-            'nim',
-            'background',
-        )
-        ->where('user_id', $id)
+        // $user = User::select(
+        //     'user_id',
+        //     'username',
+        //     'email',
+        //     'profile_info',
+        //     'user_role',
+        //     'angkatan',
+        //     'linkedin',
+        //     'instagram',
+        //     'phone_number',
+        //     'address',
+        //     'nim',
+        //     'profile_picture',
+        //     'background'
+        // )
+        $user = User::select('*')
         ->with(['projects' => function($query){
             $query->select(
             'projects.project_id',
@@ -44,7 +44,7 @@ class NavMahasiswaController extends Controller
             'projects.project_type',
             'projects.cover_image_url'
             );
-        }])->findOrFail($id);
+        }])->where('user_id', $id)->firstOrFail();
         return response()->json($user);
     }
 }

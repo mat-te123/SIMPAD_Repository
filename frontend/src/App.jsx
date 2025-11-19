@@ -8,6 +8,9 @@ import Index from './component/Page/index.jsx'
 import Project from './component/Page/Project.jsx'
 import About from './component/Page/About.jsx'
 import UserProjectPage from './component/Page/UserProjectPage.jsx'
+import Mahasiswa from './component/Page/Mahasiswa.jsx'
+import MahasiswaPage from './component/Page/MahasiswaPage.jsx'
+import MahasiswaPageEdit from './component/Page/MahasiswaPageEdit.jsx'
 import './App.css'
 
 // route test
@@ -33,6 +36,9 @@ function App() {
           <Route path='/About' element={<About />} />
           <Route path='/UserProjectPage' element={<UserProjectPage />} />
           <Route path='/login' element={<LoginWithGoogle />} />
+          <Route path='/Mahasiswa/' element={<Mahasiswa />} />
+          <Route path='/Mahasiswa/:id' element={<MahasiswaPage />} />
+          <Route path='/Mahasiswa/Edit/:id' element={<MahasiswaPageEdit />} />
           {/* router test */}
           <Route path="/api/test" element={<Test />} />
           <Route path="/demo" element={<Demo />} />

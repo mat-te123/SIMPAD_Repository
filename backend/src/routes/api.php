@@ -37,6 +37,7 @@ Route::get('/students', function() {
 });
 
 
+
 Route::controller(NavHomeController::class)->group(function () {
     Route::get('/home', 'showHome');
     Route::get('/company', 'showCompany');
@@ -51,6 +52,11 @@ Route::controller(NavProjectController::class)->group(function () {
 Route::controller(NavMahasiswaController::class)->group(function () {
     Route::get('/mahasiswa', 'showMahasiswa');
     Route::get('/mahasiswa/{id}', 'showDetailMahasiswa');
+});
+
+// Update Profile Data
+Route::controller(ProfileController::class)->group(function () {
+    Route::post('/profile/update', 'update')->middleware('auth:sanctum');
 });
 
 

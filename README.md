@@ -25,3 +25,6 @@ Bikin Repository yang lebih rapi
 Connect Backend ke Frontend, index lebih dinamis, fixing controller di backend, nambah function baru buat login pake google decided unutk ngapus semua function login jadinya cuma pake loginwithgoogle sama logout
 
 
+19/11/25
+
+update front end, progress tinggal 80 persen tinggal update auth dan masukin project, yang belum beberapa controller dari backend

@@ -1,5 +1,5 @@
 import Projectcard from "../ReuseableComponents/ProjectCard";
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
     Button, Dropdown,
     DropdownTrigger,
@@ -18,7 +18,6 @@ function ProjectContent() {
     const PlaceHolder = '/PlaceHolder.svg';
     const Files = '/NotFoundContent/Files.svg';
 
-    const { ProjectData: data } = HomeApiData;
 
     const [ActiveTab, setTab] = useState("PAD1");
     const [SelectedKeys, setSelectedKeys] = useState(new Set(["New"]));
@@ -31,6 +30,17 @@ function ProjectContent() {
     const handleClick = (tab) => {
         setTab(tab)
     }
+
+    // API data
+    const [ProjectData, setProjectData] = useState([]);
+
+    useEffect(() => {
+        async function fetchProjectData() {
+            const data = await HomeApiData.ProjectData();
+            setProjectData(data);
+        }
+        fetchProjectData();
+    }, []);
 
 
 
@@ -89,10 +99,10 @@ function ProjectContent() {
                 </div>
             </div>
             <div className={`flex flex-row flex-wrap py-7 gap-4 items-center overflow-hidden h-[500px]
-                ${data && data.length === 0 ? "h-[150px] justify-center" : "justify-between"}`}>
+                ${ProjectData && ProjectData.length === 0 ? "h-[150px] justify-center" : "justify-between"}`}>
                 {/* Card Project */}
-                {data && data.length > 0 ? (
-                    data.map((project) => (
+                {ProjectData && ProjectData.length > 0 ? (
+                    ProjectData.map((project) => (
                         <Projectcard
                             key={project.id}
                             title={project.title}

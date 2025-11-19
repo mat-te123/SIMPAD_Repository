@@ -36,7 +36,7 @@ function About() {
 
 
     return (
-        <MainTemplate title="About">
+        <MainTemplate title="About" isSearchbar={false}>
             {/* Main Div */}
             <div className="flex flex-col bg-white px-20 py-25 gap-20">
                 {/* Bagian Atas */}

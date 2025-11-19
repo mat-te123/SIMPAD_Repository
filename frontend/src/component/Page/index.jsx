@@ -1,7 +1,7 @@
 import MainTemplate from "../Template/MainTemplate";
 import { Button } from "@heroui/react";
 import Company from "../ReuseableComponents/Company";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import Projectcontent from "./ProjectContent";
 import "./index.css";
 
@@ -14,14 +14,23 @@ function index() {
   const ArrowUp = "/ArrowUp.svg";
   const Briefcase = "/NotFoundContent/Briefcase.svg";
 
-  const [isActive, SetActive] = useState(true);
-
   function handleClick() {
     console.log("Button Press");
   }
 
   // API BACKEND
-  const { CompanyData } = HomeApiData;
+  const [CompanyData, setCompanyData] = useState([]);
+
+  useEffect(() => {
+    async function fetchCompanyData() {
+      const data = await HomeApiData.CompanyData();
+      setCompanyData(data);
+    }
+    fetchCompanyData();
+  }, []);
+
+  console.log("Company Data:", CompanyData);
+
 
   return (
     <MainTemplate title="index">

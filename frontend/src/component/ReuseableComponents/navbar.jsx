@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css"
 
 
-function navbar({title}) {
+function navbar({title, isSearchbar}) {
     const logo = '/sim.svg';
     const search = '/SearchIcon.svg';
     const color = "#3333334D"
@@ -26,7 +26,7 @@ function navbar({title}) {
             </div>
             {/* ini input+nav+tombol */}
             <div className="flex items-center justify-items-start gap-10 w-[80%]">
-                <div className={`${title === '/' ? "flex" : "hidden"}`}>
+                <div className={`${isSearchbar ? "flex" : "hidden"}`}>
                     <Input
                         endContent={<img src={search} alt="Logo Search" width='36' height='36'></img>}
                         placeholder="search"
