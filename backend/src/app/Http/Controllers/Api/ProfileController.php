@@ -12,50 +12,49 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         /** @var \App\Models\User $user */
-        
-        $user = Auth::user(); // user yang sedang login
+        $user = Auth::user(); // Mengambil user yang sedang login via token
 
         // Validasi data
+        // 'nullable' berarti field tersebut boleh dikosongkan jika user belum mau mengisinya
         $request->validate([
-            'username' => 'required|string|max:50|unique:users,username,' . $user->id,
-            'nim' => 'required|string|max:20',
-            'phone_number' => 'required|string|max:20',
-            'address' => 'required|string',
-            'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+            'username' => 'nullable|string|max:50|unique:users,username,' . $user->user_id . ',user_id',
+            'nim' => 'nullable|string|max:20',
+            'phone_number' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
             'profile_info' => 'nullable|string',
-            'fullname' => 'required|string|max:100',
-            'angkatan' => 'required|integer',
+            'fullname' => 'nullable|string|max:100',
+            'angkatan' => 'nullable|integer',
             'linkedin' => 'nullable|url',
             'instagram' => 'nullable|string',
             'background' => 'nullable|string',
+            // Validasi upload gambar
+            'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
-        // ❗ EMAIL Tidak boleh diubah
-        // Jadi TIDAK ada `$user->email = ...`
-
-        // Upload foto profil kalau ada
+        // Handle Upload Foto Profil
         if ($request->hasFile('profile_picture')) {
+            // Hapus foto lama jika ada (opsional, untuk menghemat storage)
             if ($user->profile_picture) {
                 Storage::delete($user->profile_picture);
             }
 
-            $path = $request->file('profile_picture')->store('profile_pictures');
+            // Simpan foto baru
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
             $user->profile_picture = $path;
         }
 
-        // Username BOLEH diubah
-        $user->username = $request->username;
-
-        // Update data lain
-        $user->nim = $request->nim;
-        $user->phone_number = $request->phone_number;
-        $user->address = $request->address;
-        $user->profile_info = $request->profile_info;
-        $user->fullname = $request->fullname;
-        $user->angkatan = $request->angkatan;
-        $user->linkedin = $request->linkedin;
-        $user->instagram = $request->instagram;
-        $user->background = $request->background;
+        // Update data-data teks
+        // Kita gunakan $request->input(key, default) untuk keamanan
+        if ($request->has('username')) $user->username = $request->username;
+        if ($request->has('nim')) $user->nim = $request->nim;
+        if ($request->has('phone_number')) $user->phone_number = $request->phone_number;
+        if ($request->has('address')) $user->address = $request->address;
+        if ($request->has('profile_info')) $user->profile_info = $request->profile_info;
+        if ($request->has('fullname')) $user->fullname = $request->fullname;
+        if ($request->has('angkatan')) $user->angkatan = $request->angkatan;
+        if ($request->has('linkedin')) $user->linkedin = $request->linkedin;
+        if ($request->has('instagram')) $user->instagram = $request->instagram;
+        if ($request->has('background')) $user->background = $request->background;
 
         $user->save();
 

@@ -16,6 +16,8 @@ class AuthController extends Controller
 {
     
     public function googleLogin(Request $request){
+        // $email = trim($request->input('email'));
+        // dd($email);
         $email = $request->email;
         
         if (!$email || (!Str::endsWith($email, '@mail.ugm.ac.id') && !Str::endsWith($email, '@ugm.ac.id'))) {
@@ -42,6 +44,15 @@ class AuthController extends Controller
                 'token' => $token,
                 'type' => 'bearer'
             ]
+        ]);
+    }
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Successfully logged out. Token revoked.'
         ]);
     }
 }

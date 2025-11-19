@@ -10,11 +10,7 @@ use App\Models\Project;
 class NavHomeController extends Controller
 {
     public function showCompany(){
-        $companies = Company::select(
-            'company_id',
-            'company_name',
-            'company_image',
-        )->get();
+        $companies = $this->getCompanies();
 
         if ($companies->isEmpty()) {
             return response()->json([
@@ -27,16 +23,12 @@ class NavHomeController extends Controller
         return response()->json($companies);
     }
     public function showProject(){
-        $projects = Project::select(
-            'project_id',
-            'title',
-            'cover_image_url',
-        )->paginate(6);
+        $projects = $this->getProjects();
         return response()->json($projects);
     }
     public function showHome(){
-        $companies =$this->showCompany();
-        $projects = $this->showProject();
+        $companies =$this->getCompanies();
+        $projects = $this->getProjects();
         return response()->json([
             'status' => 'success',
             'data' => [
@@ -44,5 +36,21 @@ class NavHomeController extends Controller
                 'projects' => $projects,
             ]
         ]);
+    }
+    protected function getCompanies()
+    {
+        return Company::select(
+            'company_id',
+            'company_name',
+            'company_image',
+        )->get();
+    }
+    protected function getProjects()
+    {
+        return Project::select(
+            'project_id',
+            'title',
+            'cover_image_url',
+        )->paginate(6);
     }
 }

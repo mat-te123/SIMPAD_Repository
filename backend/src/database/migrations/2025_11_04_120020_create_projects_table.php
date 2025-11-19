@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->string('cover_image_url');
-            $table->string('youtube_vieo_url');
+            $table->string('youtube_video_url');
             $table->year('project_year');
             $table->enum('project_type',['pad1','pad2','pad12']);
             $table->timestamps();

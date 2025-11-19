@@ -7,7 +7,8 @@ use App\Http\Controllers\Api\NavHomeController;
 use App\Http\Controllers\Api\NavProjectController;
 use App\Http\Controllers\Api\NavMahasiswaController;
 use App\Http\Controllers\Api\ProjectController;
-
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\UserManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,49 +21,49 @@ use App\Http\Controllers\Api\ProjectController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// --- PUBLIC ROUTES (Tidak butuh login) ---
 
+// Auth (Login)
+Route::post('/login/google', [AuthController::class, 'googleLogin']);
 
-// Data Routes
-
-Route::controller(ProjectController::class)->group(function () {
-    Route::post('/addproject', 'store')->middleware('auth:sanctum');
-});
-
-// Untuk dimasukin ke dropdown mahasiswa 
+// Dropdown Data
 Route::get('/students', function() {
     return \App\Models\User::select('user_id', 'fullname')->get();
 });
 
-
-
+// Home & Navigation
 Route::controller(NavHomeController::class)->group(function () {
     Route::get('/home', 'showHome');
     Route::get('/company', 'showCompany');
 });
 
+// Projects (Public Read)
 Route::controller(NavProjectController::class)->group(function () {
     Route::get('/project', 'showProject');
     Route::get('/project/{id}', 'showDetailProject');
-    Route::post('/project/{project_id}/comments', [\App\Http\Controllers\Api\CommentController::class, 'store'])->middleware('auth:sanctum');
 });
 
+// Mahasiswa (Public Read)
 Route::controller(NavMahasiswaController::class)->group(function () {
     Route::get('/mahasiswa', 'showMahasiswa');
     Route::get('/mahasiswa/{id}', 'showDetailMahasiswa');
 });
 
-// Update Profile Data
-Route::controller(ProfileController::class)->group(function () {
-    Route::post('/profile/update', 'update')->middleware('auth:sanctum');
-});
 
+// --- PROTECTED ROUTES (Butuh Login / Bearer Token) ---
 
-// Auth Routes
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('/login/google', 'googleLogin'); 
-    Route::post('/logout', 'logout')->middleware('auth:sanctum');
+    // Auth (Logout & Get User)
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    // Profile (Update Diri Sendiri)
+    Route::post('/profile/update', [ProfileController::class, 'update']);
+
+    // Projects (Create & Comment)
+    Route::post('/addproject', [ProjectController::class, 'store']);
+    Route::post('/project/{project_id}/comments', [\App\Http\Controllers\Api\CommentController::class, 'store']);
 });
