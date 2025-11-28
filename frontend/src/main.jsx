@@ -6,10 +6,16 @@ import App from './App.jsx'
 // googleAuthProvider
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+// token AUTH
+
+import { AuthProvider } from './context/AuthContext.jsx';
+
 createRoot(document.getElementById('root')).render(
   <GoogleOAuthProvider clientId='307069688995-oghn2ocrlfv1kp7jg928g8ru4fcmg7nr.apps.googleusercontent.com'>
+  <AuthProvider>
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
+  </AuthProvider>
   </GoogleOAuthProvider>,
 )

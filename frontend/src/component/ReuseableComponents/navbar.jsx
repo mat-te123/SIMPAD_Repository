@@ -1,5 +1,10 @@
 import { Input, Button } from "@heroui/react";
 import { Link, useNavigate } from "react-router-dom";
+import AccountInfo from "../Logic/AccountInfo.js";
+import { useEffect, useState } from "react";
+
+// Auth File
+import { useAuth } from "../../context/AuthContext.jsx";
 
 // CSS
 import "./navbar.css"
@@ -8,15 +13,48 @@ import "./navbar.css"
 function navbar({title, isSearchbar}) {
     const logo = '/sim.svg';
     const search = '/SearchIcon.svg';
-    const color = "#3333334D"
     const navigate = useNavigate();
 
-    const LoginButton = () => {
+    // Auth Context Local data
+    const { User, Token, LogOut } = useAuth();
+
+    useEffect(() => {
+        const fetchMahasiswaName = async () => {
+            if (User){
+                try {
+                    const result = await AccountInfo.getUserById(User);
+                    setMahasiswaName(result.username);
+                } catch (error) {
+                    console.error("Error fetching Mahasiswa name:", error);
+                    
+                }
+            }else{
+                console.log("No User logged in");
+                setMahasiswaName('');
+            }
+        };
+        fetchMahasiswaName();
+    }, [User])
+
+    // API data
+    const [MahasiswaName,setMahasiswaName] = useState('');
+
+    console.log("Navbar Mahasiswa Name:", MahasiswaName);
+    
+    
+
+
+    
+    console.log("Navbar User:", User);
+    console.log("Navbar Token:", Token);
+
+    const LogOutHandle = () => {
+        LogOut();
         navigate('/login');
     }
 
-    const RegisterButton = () => {
-        navigate('/register');
+    const LoginButton = () => {
+        navigate('/login');
     }
 
     return (
@@ -43,18 +81,21 @@ function navbar({title, isSearchbar}) {
                 </nav>
             </div>
             <div className="flex items-center gap-4">
-                <Button
-                    size="md"
-                    className="SignUpButton drop-shadow-md"
-                    onPress={RegisterButton}
-                >Sign Up
-                </Button>
-                <Button
-                    size="md"
-                    className="LoginButton drop-shadow-md"
-                    onPress={LoginButton}
-                >Log In
-                </Button>
+                {Token ? (
+                    <>
+                    <Button onPress={LogOutHandle} color="danger">Log Out</Button>
+                    <h1> Hello {MahasiswaName}</h1>
+                    </>
+                ) : (
+                    <>
+                        <Button
+                            size="md"
+                            className="LoginButton drop-shadow-md"
+                            onPress={LoginButton}
+                        >Log In
+                        </Button>
+                    </>
+                )}
             </div>
         </div>
     )

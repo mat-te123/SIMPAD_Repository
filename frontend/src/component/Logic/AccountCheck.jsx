@@ -7,7 +7,9 @@ export async function checkAccountWithGoogle(email) {
     const response = await axios.post('http://localhost:8000/api/login/google', {
       email,
     })
-    return response.data.status === 'success';
+
+    console.log('Account check response:', response.data);
+    return response.data;
   } catch (error) {
     console.error('Error checking account:', error)
     return false

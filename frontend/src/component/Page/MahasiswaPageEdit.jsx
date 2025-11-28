@@ -1,19 +1,25 @@
 import MainTemplate from "../Template/MainTemplate";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import AccountInfo from "../Logic/AccountInfo";
 import { Button, Input } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
+import { BackendURL } from "../../utils/axiosClient.js";
+
 
 function MahasiswaPageEdit() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  const URL = BackendURL;
 
   // API data
   const [MahasiswaData, setMahasiswaData] = useState({});
 
-  const angkatan = MahasiswaData.angkatan
-    ? MahasiswaData.angkatan.split("/")[0]
+  const angkatan = MahasiswaData?.nim
+    ? MahasiswaData.nim.split("/")[0]
     : "";
-
+  console.log("angkatan:", angkatan);
     
 
   useEffect(() => {
@@ -24,6 +30,32 @@ function MahasiswaPageEdit() {
     }
     fetchMahasiswaData();
   }, [id]);
+
+  // end of API
+
+  // Handle Photo Change
+  const HandlePhotoClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const HandleSubmit = async () => {
+    const formData = new FormData();
+
+    formData.append("username", MahasiswaData.username);
+    formData.append("nim", MahasiswaData.nim);
+    formData.append("phone_number", MahasiswaData.phone_number);
+    formData.append("address", MahasiswaData.address);
+    if (MahasiswaData.profile_picture instanceof File) {
+      formData.append("profile_picture", MahasiswaData.profile_picture);
+    }
+    const result = await AccountInfo.updateUser(id, formData);
+    console.log("Update Result:", result);
+    navigate(`/mahasiswa/${id}`);
+  }
+
+  const HandleCancel = () => {
+    navigate(`/mahasiswa/${id}`);
+  }
 
   console.log("Mahasiswa Detail Data:", MahasiswaData);
 
@@ -51,15 +83,16 @@ function MahasiswaPageEdit() {
             {/* image utama */}
             <img
               src={
-                MahasiswaData.profile_picture
-                  ? MahasiswaData.profile_picture
-                  : "/PlaceHolder.svg"
+                MahasiswaData.profile_picture instanceof File
+                  ? MahasiswaData.preview
+                  : `${URL}storage/${MahasiswaData.profile_picture}`
               }
               alt="Profile"
               className="h-50 w-50 rounded-full object-cover brightness-80"
             />
             {/* image kedua */}
             <Button
+            onPress={HandlePhotoClick}
             variant="light"
             radius="full"
               isIconOnly
@@ -72,6 +105,23 @@ function MahasiswaPageEdit() {
                 />
               }
             />
+            {/* ini input gambar */}
+            <input 
+            type="file"
+            accept="image/*"
+            className="hidden" 
+            ref={fileInputRef}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                setMahasiswaData(
+                  { ...MahasiswaData, 
+                    profile_picture: file,
+                    preview: URL.createObjectURL(file) }
+                )
+              }
+            }}
+          />
           </div>
           <div className="flex flex-col mt-30 gap-5 mb-100">
             <div className="flex flex-col items-center justify-center gap-5">
@@ -119,10 +169,10 @@ function MahasiswaPageEdit() {
                 labelPlacement="outside-top"
                 label="Phone Number"
                 placeholder={
-                  MahasiswaData.phone ? MahasiswaData.phone : "Phone Number"
+                  MahasiswaData.phone_number ? MahasiswaData.phone_number : "Phone Number"
                 }
                 onChange={(e) =>
-                  setMahasiswaData({ ...MahasiswaData, phone: e.target.value })
+                  setMahasiswaData({ ...MahasiswaData, phone_number: e.target.value })
                 }
                 size="lg"
                 radius="lg"
@@ -131,9 +181,9 @@ function MahasiswaPageEdit() {
               <Input
                 labelPlacement="outside-top"
                 label="City"
-                placeholder={MahasiswaData.city ? MahasiswaData.city : "City"}
+                placeholder={MahasiswaData.address ? MahasiswaData.address : "City"}
                 onChange={(e) =>
-                  setMahasiswaData({ ...MahasiswaData, city: e.target.value })
+                  setMahasiswaData({ ...MahasiswaData, address: e.target.value })
                 }
                 size="lg"
                 radius="lg"
@@ -144,14 +194,16 @@ function MahasiswaPageEdit() {
               <Button
                 className="font-bold border-[#044645] bg-[#017777] text-white px-[28px] py-[18px]"
                 radius="sm"
+                onPress={HandleSubmit}
               >
                 Confirm
               </Button>
               <Button
                 className="font-bold border-[#BBBBBB] bg-white text-black"
                 radius="sm"
+                onPress={HandleCancel}
               >
-                Cancel
+                Back
               </Button>
             </div>
           </div>

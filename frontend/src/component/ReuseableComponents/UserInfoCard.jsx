@@ -1,7 +1,13 @@
 import { Button } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 
-function UserInfoCard({ id, imageSrc, name, nim, email, city, phone }) {
+// Auth file for spesific user info
+import { useAuth } from "../../context/AuthContext";
+
+function UserInfoCard({ id, imageSrc, name, nim, email, address, phone_number }) {
+
+  const { User } = useAuth();
+  const AuthId = User ? User : null;
 
   const navigate = useNavigate();
 
@@ -10,11 +16,11 @@ function UserInfoCard({ id, imageSrc, name, nim, email, city, phone }) {
   }
 
   return (
-    <div className="flex flex-col items-start w-fit h-fit gap-3">
+    <div className="flex flex-col items-start w-[300px] h-fit gap-3">
       <img src={imageSrc? imageSrc : "/PlaceHolder.svg"} alt="picture" className="h-50 w-50 rounded-full object-cover" />
       {/* h1 dan h2 */}
       <div>
-        <h1 className="text-[#0B1215] font-bold text-2xl">
+        <h1 className="text-[#0B1215] font-bold text-2xl truncate overflow-hidden text-ellipsis whitespace-nowrap w-[250px]">
             {name}
         </h1>
         <h2 className="text-[#606060] font-light">
@@ -32,17 +38,17 @@ function UserInfoCard({ id, imageSrc, name, nim, email, city, phone }) {
       <div className="flex flex-row items-center gap-2">
         <img src="/UserInfo/city.svg" alt="city" className="h-6 w-6"/>
         <span className="text-sm">
-            {city ? city : "No city provided"}
+            {address ? address : "No city provided"}
         </span>
       </div>
       {/* no telfon */}
       <div className="flex flex-row items-center gap-2">
         <img src="/UserInfo/phone.svg" alt="phone" className="h-6 w-6"/>
         <span className="text-sm">
-            {phone ? phone : "No phone number provided"}
+            {phone_number ? phone_number : "No phone number provided"}
         </span>
       </div>
-      <Button className="bg-[#017777] border-1 border-[#044645] text-white mt-4 font-bold"
+      <Button className={`bg-[#017777] border-1 border-[#044645] text-white mt-4 font-bold ${AuthId === id ? "flex" : "hidden"}`}
       radius="sm"
       onPress={EditButton}>
         Edit Profile

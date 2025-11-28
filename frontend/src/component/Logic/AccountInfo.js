@@ -1,11 +1,12 @@
 import axios from "axios";
 
 
+const APIURL = "http://localhost:8000/api/";
 
 // Ambil semua data user
 async function getAllUser() {
     try {
-        const response = await axios.get("http://localhost:8000/api/mahasiswa");
+        const response = await axios.get(`${APIURL}mahasiswa`);
         return response.data;
     } catch (error) {
         console.error("Error fetching users:", error);
@@ -17,7 +18,7 @@ async function getAllUser() {
 // ambil data user berdasarkan ID
 async function getUserById(id) {
     try {
-        const response = await axios.get(`http://localhost:8000/api/mahasiswa/${id}`);
+        const response = await axios.get(`${APIURL}mahasiswa/${id}`);
         return response.data;
         
     } catch (error) {
@@ -30,9 +31,10 @@ async function getUserById(id) {
 // Update Data User
 async function updateUser(id, updatedData) {
     try {
-        const response = await axios.post(`http://localhost:8000/api/profile/update`, updatedData, {
+        const response = await axios.post(`${APIURL}profile/update`, updatedData, {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'multipart/form-data'
             }
         });
         return response.data;
@@ -42,4 +44,21 @@ async function updateUser(id, updatedData) {
     }
 }
 
-export default {getAllUser, getUserById, updateUser};
+async function CreateProject(id, projectData) {
+    try {
+        const response = await axios.post(`${APIURL}addproject`, projectData, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+        
+    } catch (error) {
+        console.error("Error creating project:", error);
+        return null;
+    }
+    
+}
+
+export default {getAllUser, getUserById, updateUser, CreateProject};

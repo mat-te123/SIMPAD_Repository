@@ -28,3 +28,7 @@ Connect Backend ke Frontend, index lebih dinamis, fixing controller di backend, 
 19/11/25
 
 update front end, progress tinggal 80 persen tinggal update auth dan masukin project, yang belum beberapa controller dari backend
+
+28/11/25
+
+udah 90 persen selesai tapi malah ketemu banyak bug di bagian block blockan, ada dua opsi tapi kayaknya bakal pake opsi yang paling gampang karena ngejar target

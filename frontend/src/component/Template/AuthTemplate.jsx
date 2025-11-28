@@ -2,7 +2,6 @@ import './AuthTemplate.css'
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@heroui/react';
 import React, { useState, useEffect } from 'react';
-import Login from '../Page/Login';
 
 // logic 
 import Google from '../Logic/LoginViaGoogle'

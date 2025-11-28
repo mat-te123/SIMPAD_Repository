@@ -11,17 +11,13 @@ import UserProjectPage from './component/Page/UserProjectPage.jsx'
 import Mahasiswa from './component/Page/Mahasiswa.jsx'
 import MahasiswaPage from './component/Page/MahasiswaPage.jsx'
 import MahasiswaPageEdit from './component/Page/MahasiswaPageEdit.jsx'
+import EditProject from './component/Page/EditProject.jsx'
 import './App.css'
 
 // route test
 // import Navbar from './component/ReuseableComponents/navbar.jsx'
-import Test from './api.jsx'
 import Demo from './component/Page/Demo.jsx'
 
-// Deleted Feature
-import Login from './component/Page/Login.jsx'
-import Register from './component/Page/Register.jsx'
-import Email from './component/Page/EmailLogin.jsx'
 
 
 
@@ -39,13 +35,9 @@ function App() {
           <Route path='/Mahasiswa/' element={<Mahasiswa />} />
           <Route path='/Mahasiswa/:id' element={<MahasiswaPage />} />
           <Route path='/Mahasiswa/Edit/:id' element={<MahasiswaPageEdit />} />
+          <Route path='/Mahasiswa/:id/editProject' element={<EditProject />} />
           {/* router test */}
-          <Route path="/api/test" element={<Test />} />
           <Route path="/demo" element={<Demo />} />
-          {/* Deleted Route */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/email" element={<Email />} />
         </Routes>
       </Router>
     </HeroUIProvider>

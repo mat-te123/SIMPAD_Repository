@@ -1,13 +1,18 @@
 import MainTemplate from "../Template/MainTemplate";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import AccountInfo from "../Logic/AccountInfo";
 import UserInfoCard from "../ReuseableComponents/UserInfoCard";
 import UserProjectContent from "../ReuseableComponents/UserProjectContent";
-import { Button } from "@heroui/react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import UploadProject from "../ReuseableComponents/UploadProject.jsx";
+import { BackendURL } from "../../utils/axiosClient.js";
 
 function MahasiswaPage() {
   const { id } = useParams();
+  const { User } = useAuth();
+  const URL = BackendURL;
+  console.log("Base URL:", URL);
 
   const handleClick = (tab) => {
     setTab(tab);
@@ -25,6 +30,9 @@ function MahasiswaPage() {
     }
     fetchMahasiswaData();
   }, [id]);
+
+  console.log("image file:  " + MahasiswaData.profile_picture);
+
 
   console.log("Mahasiswa Detail Data:", MahasiswaData);
 
@@ -51,10 +59,11 @@ function MahasiswaPage() {
             <UserInfoCard
               id={MahasiswaData.user_id}
               name={MahasiswaData.username}
-              imageSrc={MahasiswaData.profile_picture}
-              angkatan={MahasiswaData.angkatan}
+              imageSrc={`${URL}storage/${MahasiswaData.profile_picture}`}
+              nim={MahasiswaData.nim}
+              address={MahasiswaData.address}
+              phone_number={MahasiswaData.phone_number}
               email={MahasiswaData.email}
-              bio={MahasiswaData.bio}
             />
           </div>
 
@@ -96,6 +105,7 @@ function MahasiswaPage() {
 
             {/* Bagian Content */}
             <div className="mt-8">
+              
               {MahasiswaData.projects &&
               MahasiswaData.projects.filter(
                 (project) => project.project_type === ActiveTab
@@ -113,23 +123,7 @@ function MahasiswaPage() {
                     />
                   ))
               ) : (
-                <div className="flex flex-col items-center justify-center h-fit w-full border-dashed border-2 border-gray-300 rounded-lg p-20 gap-6">
-                  <Button isIconOnly size="lg" className="bg-transparent" radius="full">
-                    <img
-                      src="/plus-circle.svg"
-                      alt="Add Project"
-                      width="40"
-                      height="40"
-                    />
-                  </Button>
-                  <h1 className="text-black font-bold text-3xl text-center">
-                    {`Upload ${ActiveTab} Project Portfolio`}
-                  </h1>
-                  <h2 className="text-gray-400 font-light text-xl text-center max-w-2xl">
-                    Make sure you are a Project Manager to be able to upload a
-                    new portfolio
-                  </h2>
-                </div>
+                <UploadProject id={MahasiswaData.user_id} type={ActiveTab} isMahasiswa={true} />
               )}
             </div>
           </div>

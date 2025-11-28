@@ -11,9 +11,9 @@ class NavMahasiswaController extends Controller
     public function showMahasiswa(){
         $users = User::select(
             'user_id',
-            'fullname',
+            'username',
             'angkatan',
-            // 'email',
+            'nim',
             // 'linkedin',
             // 'instagram',
             'profile_picture',
@@ -24,7 +24,7 @@ class NavMahasiswaController extends Controller
     public function showDetailMahasiswa($id){
         $user = User::select(
             'user_id',
-            'fullname',
+            'username',
             'angkatan',
             'email',
             'linkedin',

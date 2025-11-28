@@ -22,7 +22,6 @@ class ProfileController extends Controller
             'phone_number' => 'nullable|string|max:20',
             'address' => 'nullable|string',
             'profile_info' => 'nullable|string',
-            'fullname' => 'nullable|string|max:100',
             'angkatan' => 'nullable|integer',
             'linkedin' => 'nullable|url',
             'instagram' => 'nullable|string',
@@ -35,7 +34,7 @@ class ProfileController extends Controller
         if ($request->hasFile('profile_picture')) {
             // Hapus foto lama jika ada (opsional, untuk menghemat storage)
             if ($user->profile_picture) {
-                Storage::delete($user->profile_picture);
+                Storage::disk('public')->delete($user->profile_picture);
             }
 
             // Simpan foto baru

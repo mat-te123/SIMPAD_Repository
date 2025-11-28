@@ -66,4 +66,5 @@ Route::middleware('auth:sanctum')->group(function () {
     // Projects (Create & Comment)
     Route::post('/addproject', [ProjectController::class, 'store']);
     Route::post('/project/{project_id}/comments', [\App\Http\Controllers\Api\CommentController::class, 'store']);
+    
 });

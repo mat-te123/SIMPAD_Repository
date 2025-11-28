@@ -61,7 +61,7 @@ function Mahasiswa() {
           </Button>
         </div>
         {/* Bagian Card Mahasiswa */}
-        <div className="flex flex-wrap w-full items-start">
+        <div className="flex flex-wrap w-full items-start justify-evenly gap-10">
           {data && data.length > 0 ? (
             data.map((mahasiswa) => (
               <MahasiwaCard
