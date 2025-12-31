@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_projects', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained('users','user_id')->onDelete('cascade');
             $table->foreignId('project_id')->constrained('projects','project_id')->onDelete('cascade');
-            $table->enum('role', ['pm','uiux','fe','be','dev']);
+            $table->enum('role', ['Project Manager','UI/UX','Front-end','Back-end']);
             $table->primary(['user_id','project_id']);
             $table->timestamps();
         });

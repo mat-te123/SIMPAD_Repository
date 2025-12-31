@@ -4,16 +4,16 @@ import { AddText } from "./UploadProjectCase/AddText.jsx";
 
 
 
-export default function BlockContainer({block}) {
-    switch (block.type) {
-        case "image":
-            return <AddImage block={block} />;
-        case "video":
-            return <AddVideo block={block} />;
-        case "text":
-            return <AddText block={block} />;
-        default:
-            null;
-    }
-    
+export default function BlockContainer({ block, block_content, onChange }) {
+  switch (block.type) {
+    case "image":
+      return <AddImage block_content={block_content} onChange={onChange} />;
+    case "video":
+      return <AddVideo block_content={block_content} onChange={onChange} />;
+    case "text":
+      return <AddText block_content={block_content} onChange={onChange} />;
+    default:
+      return null;
+  }
 }
+

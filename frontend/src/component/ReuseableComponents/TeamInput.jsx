@@ -11,10 +11,13 @@ import {
 } from "@heroui/react";
 import { BackendURL } from "../../utils/axiosClient.js";
 
-function TeamInput() {
+function TeamInput({ onChange, ProjectManagerID, TeamName, setTeamName, setErrortitle, setErrordesc, ProjectType }) {
   const [MahasiswaData, setMahasiswaData] = useState([]);
   const [SearchData, setSearchData] = useState("");
   const [SelectedMahasiswa, setSelectedMahasiswa] = useState([]);
+  const ProjectManagerId = ProjectManagerID;
+  // console.log("Project Manager ID in TeamInput:", typeof ProjectManagerId);
+  const URL = BackendURL;
 
   const UpdateRole = (user_id, role) => {
     setSelectedMahasiswa((prevSelected) =>
@@ -23,50 +26,72 @@ function TeamInput() {
       )
     );
   };
-  const URL = BackendURL;
 
-  const filteredMahasiswa = MahasiswaData.filter((mahasiswa) =>
-    mahasiswa.username.toLowerCase().includes(SearchData.toLowerCase())
+  const filteredMahasiswa = MahasiswaData
+  .filter((m) => m.user_id !== Number(ProjectManagerId))
+  .filter((m) =>
+    m.username.toLowerCase().includes(SearchData.toLowerCase())
+)
+  .filter((m) =>
+    !SelectedMahasiswa.some((selected) => selected.user_id === m.user_id)
   );
+ 
+  
 
-  console.log("Filtered Mahasiswa:", filteredMahasiswa);
+  const idfilter = filteredMahasiswa.map((m) => m.user_id);
+
+  // console.log("data filter", typeof idfilter);
+
+  // console.log("Filtered Mahasiswa:", filteredMahasiswa);
 
   useEffect(() => {
-    async function fetchData() {
-      const result = await AccountInfo.getAllUser();
-      setMahasiswaData(result);
+    if (ProjectType) {
+      const fetchMahasiswa = async () => {
+        try {
+          const result = await AccountInfo.getUsersWithoutProject(ProjectType);
+          setMahasiswaData(result);
+        } catch (error) {
+          console.error("Error fetching Mahasiswa data:", error);
+        }
+      };
+      fetchMahasiswa();
     }
-    fetchData();
-  }, []);
+  }, [ProjectType]);
 
   const SelectUserHandler = (mahasiswa) => {
-    if (SelectedMahasiswa.length >= 3) {
-      alert("Maximum of 3 users can be selected");
-      return;
-    }
-      
-    if (!SelectedMahasiswa.some((m) => m.user_id === mahasiswa.user_id)) {
-        setSelectedMahasiswa([...SelectedMahasiswa, mahasiswa]);
-        console.log("Selected Mahasiswa:", SelectedMahasiswa);
-      } else {
-        alert("User already selected");
-        return
+    setSelectedMahasiswa((prevData) => {
+      if (prevData.length >= 3) {
+        setErrortitle("Team Limit Reached");
+        setErrordesc("You can only add up to 3 team members.");
+        return prevData;
       }
 
-    setSelectedMahasiswa([
-      ...SelectedMahasiswa,
-      { ...mahasiswa, role: "None" },
-    ]);
+      if (prevData.some((u) => u.user_id === mahasiswa.user_id)) {
+        setErrortitle("User Already Selected");
+        setErrordesc("This user has already been added to the team.");
+        return prevData;
+      }
+
+      return [...prevData, { ...mahasiswa, role: "None" }];
+    });
   };
 
-  const RemoveDataHandler = () => {
-    setSelectedMahasiswa((prevSelected) => prevSelected.slice(0, -1));
+  useEffect(() => {
+    if (onChange) {
+      onChange(SelectedMahasiswa);
+    }
+  }, [SelectedMahasiswa]);
+
+  const RemoveDataHandler = (userIdToRemove) => {
+    setSelectedMahasiswa((prev) => prev.filter(user => user.user_id !== userIdToRemove));
   };
 
   return (
     <>
       <div className="w-[50%] justify-center items-center">
         <Input
+        value={TeamName}
+        onChange={(e) => setTeamName(e.target.value)}
           type="text"
           name="title"
           id="title"
@@ -74,7 +99,10 @@ function TeamInput() {
           placeholder="Add your team name here"
           size="2md"
           textAlign="center"
-          className="text-4xl font-extrabold mb-10 text-center"
+          classNames={{
+            input: "w-full text-4xl font-medium text-center",
+            base: "w-full flex justify-center items-center mb-20",
+          }}
         />
       </div>
       {/* Bagian dalam */}
@@ -123,7 +151,7 @@ function TeamInput() {
                     </div>
                   </div>
                   <div className="ml-auto flex flex-row items-center justify-center gap-4">
-                    <Dropdown>
+                    <Dropdown placement="bottom-end" shouldBlockScroll={false}>
                       <DropdownTrigger>
                         <Button className="bg-[#044645] text-white px-4 py-2 rounded-lg">
                           {mahasiswa.role ? mahasiswa.role : "Select Role"}

@@ -3,12 +3,10 @@
 /* Note: You may need to change the path to fit your project structure */
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:is(.dark *));
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
 
 
 :root {
-  font-family: 'Inter', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -28,8 +26,8 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  scroll-behavior: smooth; /* kalau mau hilangkan scroll kecil */
+  scroll-behavior: smooth;
+   /* kalau mau hilangkan scroll kecil */
 }
 
 .ScrollHide::-webkit-scrollbar {
@@ -38,5 +36,7 @@ html, body, #root {
 
 body {
   background-color: #f0f0f0; /* optional, biar gak putih kosong */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 

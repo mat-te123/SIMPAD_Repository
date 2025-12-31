@@ -1,62 +1,59 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from "axios";
-import  Check  from './AccountCheck';
+import Check from './AccountCheck';
 import { useNavigate } from 'react-router-dom';
-
-// AuthMethod
 import { useAuth } from '../../context/AuthContext.jsx';
 
-export default function LoginGoogle() {
+// 1. Accept the onLoginError prop
+export default function LoginGoogle({ onLoginError }) {
     
-
-    const { setToken, setUser } = useAuth(); // Ini buat ngambil function setToken dan setUser dari AuthContext ngambil data token dan user
-    const navigate = useNavigate()
-
+    const { setToken, setUser, setUserCompleteData, setIsAdmin } = useAuth();
+    const navigate = useNavigate();
 
     const handleTrue = async (tokenResponse) => {
-        console.log('berhasil dengan token', tokenResponse);
-
-        const userinfo = await axios.get("https://www.googleapis.com/oauth2/v1/userinfo?alt=json", {
-            headers: {
-                Authorization: `Bearer ${tokenResponse.access_token}`,
-            },  
-        });
-
-        const email = userinfo.data.email;
-        console.log("User email:", email);
-        
-
         try {
+            // ... (Google User Info fetching code) ...
+            const userinfo = await axios.get("https://www.googleapis.com/oauth2/v1/userinfo?alt=json", {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` },  
+            });
+            const email = userinfo.data.email;
+
+            // 2. Call Check. 
+            // Thanks to Step 1, ServerResponse will contain the error object if it failed.
             const ServerResponse = await Check(email);
-            const status = ServerResponse.status;
-            const AuthData = ServerResponse.authorisation;
-            console.log("Server response status:", status);
-            console.log("Server response authorisation:", AuthData);
-            console.log("Server response user:", ServerResponse.user);
-            if (status === "success"){
-                setToken(AuthData.token);
+
+            console.log("Full Server Response:", ServerResponse);
+
+            // 3. Logic to handle Success vs Error
+            if (ServerResponse.status === "success") {
+                // SUCCESS LOGIC
+                setToken(ServerResponse.authorisation.token);
                 setUser(ServerResponse.user.user_id);
+                setUserCompleteData(ServerResponse.user);   
+                setIsAdmin(ServerResponse.isAdmin);
                 navigate("/");
+            } else {
+                // ERROR LOGIC
+                // This catches: "Login is only available for @mail.ugm.ac.id..."
+                const errorMsg = ServerResponse.message || "Unknown error occurred";
+                
+                // Send this message back to the UI
+                if (onLoginError) {
+                    onLoginError("Login Failed", errorMsg);
+                }
             }
-        } catch{
-            return false
+
+        } catch(error){
+            console.error(error);
+            if (onLoginError) onLoginError("System Error", "Something went wrong.");
         }
     }
 
-    const handleFalse = (error) => {
-        console.log('login failed:', error);
-    }
-    
-    
-    
-    
+    // ... (rest of the file)
     const login = useGoogleLogin({
         onSuccess: handleTrue,
-        onError: handleFalse,
-        scope: 'openid profile email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+        // ...
     });
 
-    return login
-    
+    return login;
 }
-

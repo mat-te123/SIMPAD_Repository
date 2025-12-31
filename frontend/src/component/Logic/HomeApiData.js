@@ -2,10 +2,12 @@ import axios from "axios";
 
 // Take Company Data from Backend API
 
+const APIURL = "http://localhost:8000/api/";
+
 export async function CompanyData() {
     try {
 
-        const response = await axios.get("http://localhost:8000/api/company");
+        const response = await axios.get(`${APIURL}company`);
 
         return response.data.status === "error" ? [] : response.data;
         
@@ -21,7 +23,7 @@ export async function CompanyData() {
 export async function ProjectData() {
     try {
 
-        const response = await axios.get("http://localhost:8000/api/project");
+        const response = await axios.get(`${APIURL}project`);
 
         return response.data.status === "error" ? [] : response.data;
         
@@ -32,6 +34,24 @@ export async function ProjectData() {
     }
 }
 
+async function Pagination(page, type="PAD 1", Sort) {
+    try {
+
+        const params = {
+            page: page,
+            project_type: type,
+            sort: Sort
+        }
+        const response = await axios.get(`${APIURL}projects`, { params });
+        return response.data;
+        
+    } catch (error) {
+        console.error("Error fetching paginated projects:", error);
+        return null;
+    }
+    
+}
 
 
-export default {CompanyData, ProjectData};
+
+export default {CompanyData, ProjectData, Pagination};

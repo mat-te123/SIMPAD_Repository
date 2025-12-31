@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\NavProjectController;
 use App\Http\Controllers\Api\NavMahasiswaController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\Api\UserManagementController;
+use App\Http\Controllers\Api\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ Route::controller(NavHomeController::class)->group(function () {
 
 // Projects (Public Read)
 Route::controller(NavProjectController::class)->group(function () {
-    Route::get('/project', 'showProject');
+    Route::get('/projects', 'showProject');
     Route::get('/project/{id}', 'showDetailProject');
 });
 
@@ -47,7 +47,20 @@ Route::controller(NavProjectController::class)->group(function () {
 Route::controller(NavMahasiswaController::class)->group(function () {
     Route::get('/mahasiswa', 'showMahasiswa');
     Route::get('/mahasiswa/{id}', 'showDetailMahasiswa');
+    Route::get('/users/available', [NavMahasiswaController::class, 'getUserNotHaveProject']);
 });
+
+// Ambil data komentar untuk sebuah project
+Route::get('/project/{project_id}/comments', [\App\Http\Controllers\Api\CommentController::class, 'ShowComments']);
+
+// Api android 
+Route::controller(NavProjectController::class)->group(function () {
+    Route::get('/android/allprojects', 'getAllProjects');
+    Route::get('/android/project/{id}', 'showDetailProject');
+});
+
+Route::get('/android/mahasiswa/{id}', [NavMahasiswaController::class, 'showDetailMahasiswa'])->name('user');
+Route::post('/android/login-google', [AuthController::class, 'googleLogin']);
 
 
 // --- PROTECTED ROUTES (Butuh Login / Bearer Token) ---
@@ -62,9 +75,29 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Profile (Update Diri Sendiri)
     Route::post('/profile/update', [ProfileController::class, 'update']);
+    Route::post('/android/profile/update', [ProfileController::class, 'update']);
+
 
     // Projects (Create & Comment)
     Route::post('/addproject', [ProjectController::class, 'store']);
     Route::post('/project/{project_id}/comments', [\App\Http\Controllers\Api\CommentController::class, 'store']);
+    Route::put('/editproject/{project_id}', [ProjectController::class, 'editDataProject']);
+    Route::delete('/deleteproject/{project_id}', [ProjectController::class, 'DeleteProject']);
+
+    // Comments (Delete Comment)
+    Route::delete('/comments/{comment_id}', [\App\Http\Controllers\Api\CommentController::class, 'destroy']);
+    
+    // User Management (Admin Only)
+    Route::middleware('isAdmin')->group(function () {
+        Route::get('/admin/users', [AdminController::class, 'getAllUsers']);
+        Route::get('/admin/projects', [AdminController::class, 'getAllProjects']);
+        Route::get('/admin/companies', [AdminController::class, 'getAllCompanies']);
+        Route::get('/admin/comments', [AdminController::class, 'getAllComments']);
+        Route::post('/admin/addcompany', [AdminController::class, 'AddCompany']);
+        Route::delete('/admin/deleteuser/{id}', [AdminController::class, 'deleteUser']);
+        Route::delete('/admin/deleteproject/{id}', [AdminController::class, 'deleteProject']);
+        Route::delete('/admin/deletecompany/{id}', [AdminController::class, 'deleteCompany']);
+        Route::delete('/admin/deletecomment/{id}', [AdminController::class, 'deleteComment']);
+    });
     
 });

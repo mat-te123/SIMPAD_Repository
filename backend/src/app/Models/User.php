@@ -23,6 +23,7 @@ class User extends Authenticatable
         'username',
         'email',
         'nim',
+        'user_role', // untuk admoin atau member
         'phone_number',
         'address',
         'profile_picture',

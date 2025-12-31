@@ -16,8 +16,6 @@ class AuthController extends Controller
 {
     
     public function googleLogin(Request $request){
-        // $email = trim($request->input('email'));
-        // dd($email);
         $email = $request->email;
         
         if (!$email || (!Str::endsWith($email, '@mail.ugm.ac.id') && !Str::endsWith($email, '@ugm.ac.id'))) {
@@ -31,14 +29,23 @@ class AuthController extends Controller
             ['email' => $email],
             [
                 'username' => explode('@', $email)[0],
+                'role' => 'member',
             ]
+            
         );
 
         $token = $user->createToken('authToken')->plainTextToken;
 
+        $isAdmin = $user->user_role === 'admin';
+
+        
+
+
+
         return response()->json([
             'status' => 'success',
             'message' => 'Login Success',
+            'isAdmin' => $isAdmin,
             'user' => $user,
             'authorisation' => [
                 'token' => $token,

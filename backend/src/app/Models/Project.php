@@ -19,6 +19,7 @@ class Project extends Model
         'project_year',
         'project_type',
         'created_at',
+        'team_name',
     ];
 
     public function users()

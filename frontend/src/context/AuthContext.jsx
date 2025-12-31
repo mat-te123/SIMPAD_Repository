@@ -1,10 +1,12 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, use } from "react";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [Token, setToken] = useState(localStorage.getItem("token") || null);
     const [User, setUser] = useState(localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null);
+    const [UserCompleteData, setUserCompleteData] = useState(localStorage.getItem("userCompleteData") ? JSON.parse(localStorage.getItem("userCompleteData")) : null);
+    const [isAdmin, setIsAdmin] = useState(localStorage.getItem("isAdmin") ? JSON.parse(localStorage.getItem("isAdmin")) : false);
 
     useEffect(() => {
         if (Token) {
@@ -13,17 +15,28 @@ export function AuthProvider({ children }) {
         if (User) {
             localStorage.setItem("user", JSON.stringify(User));
         }
-    }, [Token, User]);
+
+        if (UserCompleteData) {
+            localStorage.setItem("userCompleteData", JSON.stringify(UserCompleteData));
+        }
+        if (isAdmin !== null) {
+            localStorage.setItem("isAdmin", isAdmin);
+        }
+    }, [Token, User, UserCompleteData, isAdmin]);
 
     function LogOut() {
         setToken(null);
         setUser(null);
+        setUserCompleteData(null);
+        setIsAdmin(false);
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+        localStorage.removeItem("userCompleteData");
+        localStorage.removeItem("isAdmin");
     }
 
     return (
-        <AuthContext.Provider value={{ Token, setToken, User, setUser, LogOut }}>
+        <AuthContext.Provider value={{ Token, setToken, User, setUser, UserCompleteData, setUserCompleteData, isAdmin, setIsAdmin, LogOut }}>
             {children}
         </AuthContext.Provider>
     );

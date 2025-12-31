@@ -29,7 +29,7 @@
     height: fit-content;
     justify-content: center;
     align-items: flex-start;
-    gap: 33.22px;
+    /* gap: 33.22px; */
     background-color: #FFFFFF;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
     border-radius: 24px;
@@ -57,7 +57,7 @@
     padding: 55.36px;
     min-height: 711px;
     overflow-y: auto;
-    width: 400px;
+    width: 450px;
 }
 
 

@@ -13,11 +13,7 @@ class UserTestSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 10; $i++) {
-            User::create([
-                'email' => 'user' . $i . '@mail.ugm.ac.id',
-            ]);
-        }
+        User::factory()->count(20)->create();
         
     }
 }

@@ -8,7 +8,7 @@ function MahasiwaCard({ id, name, imageSrc, angkatan }) {
     !imageSrc || imageSrc === "" ? "/PlaceHolder.svg" : `${URL}storage/${imageSrc}`;
   const nameMahasiswa = !name || name === "" ? "Nama Mahasiswa" : name;
   const angkatanMahasiswa =
-    !angkatan || angkatan === "" ? "Mahasiswa TRPL 24" : angkatan;
+    !angkatan || angkatan === "" ? "Mahasiswa TRPL" : `Mahasiswa TRPL ${angkatan}`;
     const navigate = useNavigate();
 
     const ButtonHandle = () => {

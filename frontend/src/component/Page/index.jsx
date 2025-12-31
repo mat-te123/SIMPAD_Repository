@@ -1,7 +1,7 @@
 import MainTemplate from "../Template/MainTemplate";
 import { Button } from "@heroui/react";
 import Company from "../ReuseableComponents/Company";
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment, useEffect, use } from "react";
 import Projectcontent from "./ProjectContent";
 import "./index.css";
 
@@ -14,11 +14,15 @@ function index() {
   const ArrowUp = "/ArrowUp.svg";
   const Briefcase = "/NotFoundContent/Briefcase.svg";
 
-  function handleClick() {
-    console.log("Button Press");
-  }
+  const ScrollSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   // API BACKEND
+  // company data
   const [CompanyData, setCompanyData] = useState([]);
 
   useEffect(() => {
@@ -31,9 +35,66 @@ function index() {
 
   console.log("Company Data:", CompanyData);
 
+  const filledData =
+    CompanyData.length < 5
+      ? [...CompanyData, ...CompanyData, ...CompanyData]
+      : CompanyData;
+
+  // project data with infinite scroll adn filter
+
+  const [ActiveTab, setTab] = useState("PAD1");
+  const [SelectedKeys, setSelectedKeys] = useState(new Set(["New"]));
+
+  const [ProjectData, setProjectData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const loadprojects = async (page, type, sort, isReplace = false) => {
+    if (loading) return; // Prevent multiple simultaneous loads
+    setLoading(true);
+    try {
+      const fixedType = type === "PAD1" ? "PAD 1" : "PAD 2";
+      const sortParam = Array.from(sort).join("").replace(/_/g, "");
+
+      const result = await HomeApiData.Pagination(page, fixedType, sortParam);
+      if (!result || !result.data || result.data.length === 0) {
+        setHasMore(false);
+        if (isReplace) {
+          setProjectData([]);
+        }
+      } else {
+        setProjectData((prevProjects) => {
+          if (isReplace) {
+            return result.data;
+          }
+
+          return [...prevProjects, ...result.data];
+        });
+
+        setHasMore(result.next_page_url !== null);
+      }
+    } catch (error) {
+      console.error("Error loading projects:", error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    setHasMore(true); // Reset hasMore when page changes
+    setPage(1); // Reset to first page
+    loadprojects(1, ActiveTab, SelectedKeys, true);
+  }, [ActiveTab, SelectedKeys]);
+
+  useEffect(() => {
+    if (page === 1) return; // Skip initial load since it's handled in other useEffect
+    loadprojects(page, ActiveTab, SelectedKeys, false);
+  }, [page]);
+
+  console.log("Project Data:", ProjectData);
 
   return (
-    <MainTemplate title="index">
+    <MainTemplate title="index" targetID="content" SearchData={ProjectData}>
       {/* Bagian Atas */}
       <div
         id="Upper"
@@ -44,10 +105,10 @@ function index() {
             Temukan Beragam Proyek TRPL Disini !
           </h1>
           <h2 className="w-full text-center text-[18px] font-medium ">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
-            mollitia pariatur iusto praesentium iure architecto. Praesentium,
-            voluptatem quos? Cum voluptate aliquam repudiandae, voluptatem
-            deserunt ipsam cupiditate architecto maxime enim nemo.
+            Karya-karya ini menunjukkan kreativitas, kemampuan teknis, dan
+            inovasi dalam bidang teknologi perangkat lunak. Jelajahi ide-ide
+            segar, solusi nyata, dan beragam aplikasi yang dikembangkan oleh
+            para mahasiswa berbakat.
           </h2>
         </div>
         <Button
@@ -55,27 +116,30 @@ function index() {
           endContent={
             <img src={Arrow} alt="Logo Arrow" width="24" height="24"></img>
           }
-          onPress={handleClick}
+          onPress={() => ScrollSection("content")}
         >
           Explore PAD
         </Button>
       </div>
-      <div className="flex flex-col items-center justify-start min-h-screen w-full bg-white pt-20 gap-10">
+      <div
+        id="content"
+        className="flex flex-col items-center justify-start w-full bg-white pt-20 gap-10"
+      >
         {/* text awal */}
-        <div className="flex flex-col items-center w-full px-10">
-          <h1 className="text-[46px] font-semibold tracking-tighter">
+        <div className="flex flex-col items-center w-full px-40 mb-15 gap-8">
+          <h1 className="text-[46px] font-bold tracking-tighter">
             Proyek Aplikasi Dasar
           </h1>
           <h2 className="text-[18px] font-medium text-center">
-            PAD adalah Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Praesent pellentesque, turpis id feugiat consectetur, nisi justo
-            ullamcorper ligula, vitae rhoncus magna purus quis lacus. Sed
-            vulputate diam non lobortis finibus. Curabitur mollis sed dolor nec
-            auctor. Aenean a risus interdum purus sodales pellentesque.
-            Curabitur aliquam diam eget quam condimentum, ultricies sagittis
-            lectus vulputate. Mauris pellentesque ornare nisi, ut congue nisl
-            luctus in. Suspendisse potenti. Donec facilisis mollis risus at
-            pellentesque. Curabitur bibendum felis at est ultricies commodo.
+            PAD adalah proyek fundamental yang dirancang untuk membangun dasar
+            kemampuan mahasiswa dalam pengembangan aplikasi. Melalui proyek ini,
+            mahasiswa diperkenalkan pada konsep inti pemrograman, arsitektur
+            aplikasi, dan alur kerja pengembangan perangkat lunak. Dalam PAD,
+            setiap mahasiswa belajar mengubah kebutuhan sederhana menjadi solusi
+            nyata—mulai dari perancangan antarmuka, logika program, hingga
+            pengujian fungsional. Proyek ini menjadi pondasi penting sebelum
+            memasuki pengembangan sistem yang lebih kompleks, sekaligus melatih
+            ketelitian, kreativitas, dan kemampuan problem solving.
           </h2>
         </div>
         {/* LOGO Company infinte Scroll */}
@@ -97,27 +161,48 @@ function index() {
               </div>
             </div>
           ) : (
-            <div className="company-wrapper flex gap-10 animate-scroll">
-              {[...Array(5)].map(
-                (
-                  _,
-                  i // repeat list 3x for smooth looping
-                ) => (
-                  <Fragment key={i}>
-                    {CompanyData.map(({ logo, name }, index) => (
-                      <Company key={`${i}-${index}`} logo={logo} name={name} />
-                    ))}
-                  </Fragment>
-                )
-              )}
+            <div className="w-full py-10 overflow-hidden bg-white">
+              {/* The Mask Container */}
+              <div className="flex w-full [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]">
+                {/* Track 1: Original */}
+                <div className="flex animate-loop-scroll gap-10 pr-10 min-w-full">
+                  {filledData.map((data, index) => (
+                    <Company
+                      key={`original-${index}`}
+                      logo={data.company_image}
+                      name={data.company_name}
+                    />
+                  ))}
+                </div>
+
+                {/* Track 2: Duplicate (for seamless effect) */}
+                <div
+                  className="flex animate-loop-scroll gap-10 pr-10 min-w-full"
+                  aria-hidden="true"
+                >
+                  {filledData.map((data, index) => (
+                    <Company
+                      key={`duplicate-${index}`}
+                      logo={data.company_image}
+                      name={data.company_name}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </div>
         {/* Kontent utama termasuk */}
-        <Projectcontent />
+        <Projectcontent
+          ProjectData={ProjectData}
+          ActiveTab={ActiveTab}
+          setTab={setTab}
+          SelectedKeys={SelectedKeys}
+          setSelectedKeys={setSelectedKeys}
+        />
         <div
           id="ButtonLoadMore-Up"
-          className="relative w-full flex items-center justify-end px-10 py-10 "
+          className="relative w-full flex items-center justify-end px-40 py-10 "
         >
           {/* Centered button */}
           <div className="absolute left-1/2 -translate-x-1/2">
@@ -125,8 +210,17 @@ function index() {
               size="lg"
               radius="sm"
               className="font-bold border-[#044645] bg-[#017777] text-white px-[28px] py-[18px]"
+              isLoading={loading}
+              onPress={() => {
+                setPage((prevPage) => prevPage + 1);
+              }}
+              disabled={!hasMore || loading}
             >
-              Explore More
+              {loading
+                ? "Loading..."
+                : hasMore
+                ? "Load More Projects"
+                : "No More Projects"}
             </Button>
           </div>
 
@@ -134,8 +228,7 @@ function index() {
           <Button
             isIconOnly
             className="border border-[#BBBBBB] bg-[#FFFFFF] text-white "
-            as="a"
-            href="#Upper"
+            onPress={() => ScrollSection("Upper")}
           >
             <img src={ArrowUp} alt="LogoAtas" height="15" width="15" />
           </Button>

@@ -25,21 +25,30 @@ class ProfileController extends Controller
             'angkatan' => 'nullable|integer',
             'linkedin' => 'nullable|url',
             'instagram' => 'nullable|string',
-            'background' => 'nullable|string',
+            'background' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             // Validasi upload gambar
             'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
         // Handle Upload Foto Profil
-        if ($request->hasFile('profile_picture')) {
+        if ($request->hasFile('profile_picture') || $request->hasFile('background')) {
             // Hapus foto lama jika ada (opsional, untuk menghemat storage)
             if ($user->profile_picture) {
                 Storage::disk('public')->delete($user->profile_picture);
+            } 
+            if ($user->background) {
+                Storage::disk('public')->delete($user->background);
             }
 
             // Simpan foto baru
-            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-            $user->profile_picture = $path;
+            if ($request->hasFile('profile_picture')) {
+                $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+                $user->profile_picture = $path;
+            }
+            if ($request->hasFile('background')) {
+                $path = $request->file('background')->store('backgrounds', 'public');
+                $user->background = $path;
+            }
         }
 
         // Update data-data teks
@@ -53,7 +62,6 @@ class ProfileController extends Controller
         if ($request->has('angkatan')) $user->angkatan = $request->angkatan;
         if ($request->has('linkedin')) $user->linkedin = $request->linkedin;
         if ($request->has('instagram')) $user->instagram = $request->instagram;
-        if ($request->has('background')) $user->background = $request->background;
 
         $user->save();
 

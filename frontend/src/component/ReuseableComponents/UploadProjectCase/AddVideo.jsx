@@ -13,15 +13,15 @@ import extractYouTubeID from "../../Logic/ExtractYoutubeID.jsx";
 
   
 
-function AddVideo({ block }) {
+function AddVideo({ block_content = {}, onChange }) {
 
-  const IDvideo = extractYouTubeID(block.block_content?.video_url);
-  console.log("Extracted Video ID:", IDvideo);
+  const IDvideo = extractYouTubeID(block_content?.video_url);
+  // console.log("Extracted Video ID:", IDvideo);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
   const LinkAttach = () => {
     onOpen();
-    console.log("Opening Modal");
+    // console.log("Opening Modal");
   }
 
   return (
@@ -31,11 +31,11 @@ function AddVideo({ block }) {
         allowFullScreen
         />
       ) : (
-        <div className="bg-[#E6F2F2] rounded-xl flex flex-col items-center justify-center p-4 w-full h-[600px]">
-          <span>
+        <div className="bg-[#E6F2F2] rounded-xl flex flex-col items-center justify-center p-4 w-full h-[600px] shadow-md">
+          <span className="text-2xl">
             Attach youtube video <a onClick={LinkAttach} className="underline cursor-pointer hover:text-[#017777]">Link</a>
           </span>
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <Modal isOpen={isOpen} onOpenChange={onOpenChange} shouldBlockScroll={false}>
             <ModalContent>
               <ModalHeader>Add Youtube Video Link</ModalHeader>
               <ModalBody>
@@ -43,9 +43,7 @@ function AddVideo({ block }) {
                   type="text" 
                   placeholder="Enter Youtube Video Link"
                   className="w-full border border-gray-300 rounded-lg p-2"
-                  onChange={(e) => {
-                    block.block_content.video_url = e.target.value;
-                  }}
+                  onChange={(e) => onChange(e.target.value)}
                 />
               </ModalBody>
               <ModalFooter>

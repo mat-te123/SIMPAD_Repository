@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id('project_id')->unique();
             $table->string('title');
-            $table->string('description');
-            $table->string('cover_image_url');
+            $table->text('description');
+            $table->string('cover_image_url');  
             $table->string('youtube_video_url');
             $table->year('project_year');
-            $table->enum('project_type',['pad1','pad2','pad12']);
+            $table->enum('project_type',['PAD 1','PAD 2','PAD 1 dan 2']);
             $table->timestamps();
         });
     }
